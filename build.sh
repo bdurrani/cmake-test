@@ -3,4 +3,5 @@
 set -euo pipefail
 
 cd out/build
+# cd build
 make 

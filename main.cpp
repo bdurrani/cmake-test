@@ -1,5 +1,7 @@
 #include <iostream>
-#include "GLFW/glfw3.h"
+#include <GL/glew.h>
+// #include <GL/glut.h>
+#include <GLFW/glfw3.h>
 #include "cmaketestConfig.h"
 
 using namespace std;
