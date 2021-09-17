@@ -40,3 +40,9 @@ git push
 ```bash
 git submodule update --init --recursive
 ```
+
+### Build Package
+
+Have to run `cpack` from the build folder.
+If you use the CMake extension in VSCode, it will automatically rebuild for you
+on any change.
