@@ -1,0 +1,4 @@
+#define cmaketest_VERSION_MAJOR "@cmaketest_VERSION_MAJOR@"
+
+// this also works
+#define cmaketest_VERSION_MINOR "${cmaketest_VERSION_MINOR}"

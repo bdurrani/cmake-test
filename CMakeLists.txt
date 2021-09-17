@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.16.3)
+
 # This will be the name of the 
-# executable
-project(cmake-test)
+# executable.
+# This is also the source of the 
+# version information
+project(cmaketest VERSION 1.0)
+
+configure_file(cmaketestConfig.h.in cmaketestConfig.h)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/poppler)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external)
@@ -14,13 +19,14 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
 message("${CMAKE_MODULE_PATH}")
 add_executable(${PROJECT_NAME} main.cpp)
 
+
 add_subdirectory(adder)
 add_subdirectory(external/glfw)
-add_subdirectory(external/poppler)
+# can't get poppler to build directly
+# add_subdirectory(external/poppler)
 
 target_link_libraries(${PROJECT_NAME} adder)
 
@@ -34,4 +40,5 @@ target_link_libraries(${PROJECT} adder glfw)
 target_include_directories(${PROJECT_NAME} 
     PUBLIC "${PROJECT_SOURCE_DIR}/adder"
     PUBLIC "${PROJECT_SOURCE_DIR}/external/glfw/include"
+    PUBLIC ${PROJECT_BINARY_DIR}
 )
