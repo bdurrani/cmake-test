@@ -3,4 +3,5 @@
 set -euo pipefail
 
 cmake -S .  \
-  -B out/build \
+  -DGLFW_BUILD_DOCS=OFF -DUSE_ADDER=OFF \
+  -B out/build   

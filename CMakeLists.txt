@@ -6,11 +6,10 @@ cmake_minimum_required(VERSION 3.16.3)
 # version information
 project(cmaketest VERSION 1.0)
 
-configure_file(cmaketestConfig.h.in cmaketestConfig.h)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/poppler)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/poppler/cmake/modules)
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/poppler)
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external)
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/poppler/cmake/modules)
 
 # specify the C++ standard
 # Grabbed this from here: 
@@ -19,26 +18,40 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-message("${CMAKE_MODULE_PATH}")
+option(USE_ADDER "A simple addition lib" ON)
+
+# optional library logic
+if(USE_ADDER)
+  add_subdirectory(adder)
+
+  list(APPEND EXTRA_LIBS adder)
+  list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/adder")
+  list(APPEND EXTRA_LINKS adder)
+
+endif()
+
+configure_file(cmaketestConfig.h.in cmaketestConfig.h)
+
 add_executable(${PROJECT_NAME} main.cpp)
 
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
-add_subdirectory(adder)
 add_subdirectory(external/glfw)
 # can't get poppler to build directly
 # add_subdirectory(external/poppler)
 
-target_link_libraries(${PROJECT_NAME} adder)
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC "${PROJECT_SOURCE_DIR}/external/glfw/include"
+    ${EXTRA_INCLUDES}
+)
 
 target_link_directories(${PROJECT_NAME}
   PRIVATE external/glfw/src
+  ${EXTRA_LIBS}
 )
 
 # Need this to link glfw, but not adder
-target_link_libraries(${PROJECT} adder glfw)
-
-target_include_directories(${PROJECT_NAME} 
-    PUBLIC "${PROJECT_SOURCE_DIR}/adder"
-    PUBLIC "${PROJECT_SOURCE_DIR}/external/glfw/include"
-    PUBLIC ${PROJECT_BINARY_DIR}
+target_link_libraries(${PROJECT_NAME} 
+  ${EXTRA_LINKS} 
+  glfw
 )
